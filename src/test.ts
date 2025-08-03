@@ -1,4 +1,5 @@
 import {
+  getApiVersion,
   getDeviceInfo,
   getFlightInformation,
   getManufacturerConfig,
@@ -26,3 +27,8 @@ const wifiInventory = manufacturerConfig.emulator
   ? await getWifiInventory(manufacturerConfig.emulator)
   : null;
 console.log("Wi-Fi inventory:", wifiInventory);
+
+const apiVersion = manufacturerConfig.emulator
+  ? await getApiVersion(manufacturerConfig.emulator)
+  : null;
+console.log("API version:", apiVersion);

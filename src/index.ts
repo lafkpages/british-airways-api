@@ -1,5 +1,6 @@
 import { parse } from "valibot";
 import {
+  apiVersionSchema,
   deviceInfoSchema,
   flightInformationSchema,
   manufacturerConfigSchema,
@@ -55,5 +56,12 @@ export async function getWifiInventory(apiBaseUrl: string | URL) {
     await (
       await fetch(new URL("v1/inventory-svc/inventory?type=WIFI", apiBaseUrl))
     ).json()
+  );
+}
+
+export async function getApiVersion(apiBaseUrl: string | URL) {
+  return parse(
+    apiVersionSchema,
+    await (await fetch(new URL("version.json", apiBaseUrl))).json()
   );
 }

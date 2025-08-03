@@ -1,12 +1,14 @@
 import {
   array,
   boolean,
+  isoTimestamp,
   literal,
   looseObject,
   nullish,
   number,
   objectWithRest,
   partial,
+  pipe,
   string,
   union,
   unknown,
@@ -157,5 +159,12 @@ export const wifiInventorySchema = partial(
     $loki: number(),
     flightInformation: flightInformationSchema,
     type: literal("WIFI"),
+  })
+);
+
+export const apiVersionSchema = partial(
+  looseObject({
+    version: string(),
+    createdAt: pipe(string(), isoTimestamp()),
   })
 );
