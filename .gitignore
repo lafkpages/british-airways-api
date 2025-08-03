@@ -1,5 +1,7 @@
 *.har
 /nmap.md
+/re/rawChunks
+/re/src
 
 # dependencies (bun install)
 node_modules
