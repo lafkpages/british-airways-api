@@ -6,6 +6,7 @@ import {
   internetProvisionSchema,
   manufacturerConfigSchema,
   portalConfigSchema,
+  registerDeviceSchema,
   wifiInventorySchema,
 } from "./schemas";
 
@@ -64,6 +65,24 @@ export async function getApiVersion(apiBaseUrl: string | URL) {
   return parse(
     apiVersionSchema,
     await (await fetch(new URL("version.json", apiBaseUrl))).json()
+  );
+}
+
+export async function registerDevice(apiBaseUrl: string | URL) {
+  return parse(
+    registerDeviceSchema,
+    await (
+      await fetch(
+        new URL(
+          // TODO: figure out what NONE means here, but it seems to work
+          "v2/internet-svc/internet-provision/register-device/NONE",
+          apiBaseUrl
+        ),
+        {
+          method: "POST",
+        }
+      )
+    ).json()
   );
 }
 

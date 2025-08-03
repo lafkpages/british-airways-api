@@ -180,6 +180,12 @@ export const apiVersionSchema = partial(
   })
 );
 
+export const registerDeviceSchema = partial(
+  looseObject({
+    deviceToken: string(),
+  })
+);
+
 export const internetProvisionSchema = partial(
   looseObject({
     $$type: literal("InternetProvision"),

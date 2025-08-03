@@ -6,6 +6,7 @@ import {
   getManufacturerConfig,
   getPortalConfig,
   getWifiInventory,
+  registerDevice,
 } from ".";
 
 const manufacturerConfig = await getManufacturerConfig();
@@ -34,7 +35,13 @@ const apiVersion = manufacturerConfig.emulator
   : null;
 console.log("API version:", apiVersion);
 
+const deviceToken =
+  (manufacturerConfig.emulator
+    ? await registerDevice(manufacturerConfig.emulator)
+    : null
+  )?.deviceToken || "null";
+
 const internetProvision = manufacturerConfig.emulator
-  ? await getInternetProvision(manufacturerConfig.emulator)
+  ? await getInternetProvision(manufacturerConfig.emulator, deviceToken)
   : null;
 console.log("Internet provision:", internetProvision);
