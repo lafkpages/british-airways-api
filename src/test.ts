@@ -8,8 +8,11 @@ import {
   getPortalConfig,
   getWeather,
   getWifiInventory,
+  isInFlight,
   registerDevice,
 } from ".";
+
+console.log("Is in flight:", await isInFlight());
 
 const manufacturerConfig = await getManufacturerConfig();
 console.log("Manufacturer config:", manufacturerConfig);

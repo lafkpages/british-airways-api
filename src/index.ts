@@ -12,6 +12,16 @@ import {
   wifiInventorySchema,
 } from "./schemas";
 
+export async function isInFlight() {
+  const resp = await fetch("https://api.air.dot-air.com/version.json", {
+    redirect: "manual",
+  });
+  return (
+    resp.ok &&
+    !!resp.headers.get("content-type")?.startsWith("application/json")
+  );
+}
+
 export async function getManufacturerConfig() {
   return parse(
     manufacturerConfigSchema,
