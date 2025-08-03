@@ -1,4 +1,5 @@
 import {
+  getAirportInformation,
   getApiVersion,
   getDeviceInfo,
   getFlightInformation,
@@ -45,3 +46,21 @@ const internetProvision = manufacturerConfig.emulator
   ? await getInternetProvision(manufacturerConfig.emulator, deviceToken)
   : null;
 console.log("Internet provision:", internetProvision);
+
+const originAirportInformation =
+  manufacturerConfig.emulator && flightInformation?.originIATA
+    ? await getAirportInformation(
+        manufacturerConfig.emulator,
+        flightInformation.originIATA
+      )
+    : null;
+console.log("Origin airport information:", originAirportInformation);
+
+const destinationAirportInformation =
+  manufacturerConfig.emulator && flightInformation?.destinationIATA
+    ? await getAirportInformation(
+        manufacturerConfig.emulator,
+        flightInformation.destinationIATA
+      )
+    : null;
+console.log("Destination airport information:", destinationAirportInformation);

@@ -1,5 +1,6 @@
 import { parse } from "valibot";
 import {
+  airportInformationSchema,
   apiVersionSchema,
   deviceInfoSchema,
   flightInformationSchema,
@@ -98,6 +99,23 @@ export async function getInternetProvision(
           "X-Device-Token": deviceToken,
         },
       })
+    ).json()
+  );
+}
+
+export async function getAirportInformation(
+  apiBaseUrl: string | URL,
+  iata: string
+) {
+  return parse(
+    airportInformationSchema,
+    await (
+      await fetch(
+        new URL(
+          `v1/airport-information-svc?iata=${encodeURIComponent(iata)}`,
+          apiBaseUrl
+        )
+      )
     ).json()
   );
 }

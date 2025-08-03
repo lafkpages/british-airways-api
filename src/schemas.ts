@@ -294,3 +294,23 @@ export const internetProvisionSchema = partial(
     $loki: number(),
   })
 );
+
+export const airportInformationSchema = partial(
+  looseObject({
+    icao: string(),
+    iata: string(),
+    timezone: string(),
+    /**
+     * Translations for the airport name. For example,
+     * given the IATA code `LHR`, the response may look like this:
+     *
+     * ```json
+     * {
+     *  "en_GB": "London Heathrow",
+     *  "es_ES": "London Heathrow"
+     * }
+     * ```
+     */
+    name: record(string(), string()),
+  })
+);
