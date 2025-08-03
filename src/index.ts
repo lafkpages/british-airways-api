@@ -8,6 +8,7 @@ import {
   manufacturerConfigSchema,
   portalConfigSchema,
   registerDeviceSchema,
+  weatherSchema,
   wifiInventorySchema,
 } from "./schemas";
 
@@ -116,6 +117,30 @@ export async function getAirportInformation(
           apiBaseUrl
         )
       )
+    ).json()
+  );
+}
+
+export async function getWeather(
+  apiBaseUrl: string | URL,
+  languages: string[] = ["en-GB"],
+  services: string[] = ["currentconditions", "forecast5days"],
+  unit: "Metric" | "Imperial" = "Metric"
+) {
+  return parse(
+    weatherSchema,
+    await (
+      await fetch(new URL(`v1/weather-svc/weather`, apiBaseUrl), {
+        method: "POST",
+        body: JSON.stringify({
+          languages,
+          services,
+          unit,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
     ).json()
   );
 }

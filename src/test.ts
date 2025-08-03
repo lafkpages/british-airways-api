@@ -6,6 +6,7 @@ import {
   getInternetProvision,
   getManufacturerConfig,
   getPortalConfig,
+  getWeather,
   getWifiInventory,
   registerDevice,
 } from ".";
@@ -64,3 +65,8 @@ const destinationAirportInformation =
       )
     : null;
 console.log("Destination airport information:", destinationAirportInformation);
+
+const weather = manufacturerConfig.emulator
+  ? await getWeather(manufacturerConfig.emulator)
+  : null;
+console.log("Weather:", weather);

@@ -18,6 +18,7 @@ import {
 
 // Common schemas
 const timestamp = number();
+const translations = record(string(), string());
 const userSchema = partial(
   looseObject({
     $$type: literal("User"),
@@ -28,6 +29,19 @@ const userSchema = partial(
     username: string(),
     firstName: string(),
     lastName: string(),
+  })
+);
+const valueWithUnit = partial(
+  looseObject({
+    Value: number(),
+    Unit: string(),
+    UnitType: number(),
+  })
+);
+const valueInUnitSystems = partial(
+  looseObject({
+    Metric: valueWithUnit,
+    Imperial: valueWithUnit,
   })
 );
 
@@ -312,5 +326,88 @@ export const airportInformationSchema = partial(
      * ```
      */
     name: record(string(), string()),
+  })
+);
+
+export const weatherSchema = partial(
+  looseObject({
+    location: partial(
+      looseObject({
+        LocalizedName: translations,
+        Country: partial(looseObject({ LocalizedName: translations })),
+        AdministrativeArea: partial(
+          looseObject({
+            LocalizedName: translations,
+          })
+        ),
+        TimeZone: partial(
+          looseObject({
+            Code: string(),
+            Name: string(),
+            GmtOffset: number(),
+            IsDaylightSaving: boolean(),
+          })
+        ),
+        GeoPosition: partial(
+          looseObject({
+            Latitude: number(),
+            Longitude: number(),
+            Elevation: valueInUnitSystems,
+          })
+        ),
+      })
+    ),
+    services: partial(
+      looseObject({
+        currentconditions: array(
+          partial(
+            looseObject({
+              LocalObservationDateTime: pipe(string(), isoTimestamp()),
+              EpochTime: timestamp,
+              WeatherText: translations,
+              WeatherIcon: number(),
+              IsDayTime: boolean(),
+              /**
+               * Only the unit specified in the request is included here.
+               */
+              Temperature: valueInUnitSystems,
+              MobileLink: translations,
+              Link: translations,
+            })
+          )
+        ),
+        forecast5days: array(
+          partial(
+            looseObject({
+              Date: pipe(string(), isoTimestamp()),
+              EpochDate: timestamp,
+              Temperature: partial(
+                looseObject({
+                  Minimum: valueInUnitSystems,
+                  Maximum: valueInUnitSystems,
+                })
+              ),
+              Day: partial(
+                looseObject({
+                  Icon: number(),
+                  IconPhrase: translations,
+                  RainProbability: number(),
+                })
+              ),
+              Night: partial(
+                looseObject({
+                  Icon: number(),
+                  IconPhrase: translations,
+                  RainProbability: number(),
+                })
+              ),
+              Sources: array(string()),
+              MobileLink: translations,
+              Link: translations,
+            })
+          )
+        ),
+      })
+    ),
   })
 );
