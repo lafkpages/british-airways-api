@@ -2,6 +2,7 @@ import {
   getApiVersion,
   getDeviceInfo,
   getFlightInformation,
+  getInternetProvision,
   getManufacturerConfig,
   getPortalConfig,
   getWifiInventory,
@@ -32,3 +33,8 @@ const apiVersion = manufacturerConfig.emulator
   ? await getApiVersion(manufacturerConfig.emulator)
   : null;
 console.log("API version:", apiVersion);
+
+const internetProvision = manufacturerConfig.emulator
+  ? await getInternetProvision(manufacturerConfig.emulator)
+  : null;
+console.log("Internet provision:", internetProvision);

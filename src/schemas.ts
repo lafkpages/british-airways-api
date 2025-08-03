@@ -8,11 +8,30 @@ import {
   number,
   objectWithRest,
   partial,
+  picklist,
   pipe,
+  record,
   string,
   union,
   unknown,
 } from "valibot";
+
+// Common schemas
+const timestamp = number();
+const userSchema = partial(
+  looseObject({
+    $$type: literal("User"),
+    /**
+     * Seems like the identity is sometimes just `${firstName}.${lastName}`.
+     */
+    identity: string(),
+    username: string(),
+    firstName: string(),
+    lastName: string(),
+  })
+);
+
+// API call schemas
 
 export const manufacturerConfigSchema = partial(
   looseObject({
@@ -122,15 +141,7 @@ export const wifiInventorySchema = partial(
     key: string(),
     status: string(),
     standardCatalogue: string(),
-    flightOpenedBy: partial(
-      looseObject({
-        $$type: string(),
-        identity: string(),
-        username: string(),
-        firstName: string(),
-        lastName: string(),
-      })
-    ),
+    flightOpenedBy: userSchema,
     modified: string(),
     created: string(),
     flightOrigin: string(),
@@ -166,5 +177,114 @@ export const apiVersionSchema = partial(
   looseObject({
     version: string(),
     createdAt: pipe(string(), isoTimestamp()),
+  })
+);
+
+export const internetProvisionSchema = partial(
+  looseObject({
+    $$type: literal("InternetProvision"),
+    key: string(),
+    user: userSchema,
+    orderKey: string(),
+    orderItemKey: string(),
+    /**
+     * JWT with a payload as follows:
+     *
+     * ```js
+     * const payloadSchema = partial(looseObject({
+     *  macAddress: string(),
+     * }));
+     * ```
+     *
+     * The contained MAC address is the same as `sessionInfo[?].userMac`.
+     */
+    deviceToken: string(),
+    /**
+     * Format: `XXX--xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx--SSSS--sss`.
+     *
+     * The 32-char hex string of x's here is the `orderItemKey`.
+     * `SSSS` is the same as `sessionInfo[?].serviceType`.
+     * `sss` is similar to the service type fields (eg. STRM and free_strm, not identical).
+     */
+    provisionedUsername: string(),
+    serviceType: string(),
+    packageTitles: partial(
+      looseObject({
+        sku: string(),
+        /**
+         * Translations, eg.:
+         *
+         * ```json
+         * {
+         *  "en_GB": "Flight pass",
+         *  "es_ES": "Todo el vuelo"
+         * }
+         * ```
+         */
+        itemTitles: record(string(), string()),
+        /**
+         * Translations, eg.:
+         *
+         * ```json
+         * {
+         *  "en_GB": "Browse and stream",
+         *  "es_ES": "Navegar y streaming"
+         * }
+         * ```
+         */
+        categoryTitles: record(string(), string()),
+      })
+    ),
+    wispPackageType: string(),
+    isFullFlightPackage: boolean(),
+    allowedSessionTimeSecs: boolean(),
+    sessionInfo: array(
+      partial(
+        looseObject({
+          /**
+           * This is the IP address of the device connected to the BAWi-Fi network. Probably always on the `172.x.x.x` range.
+           */
+          ipAddress: string(),
+          state: picklist([
+            // See Webpack chunk main.4984681737748e4f, ESM module 93648
+            "ACTIVE",
+            "CLOSED",
+            "EXPIRED",
+            "INACTIVE",
+            "IP_RELEASED",
+            "NEW",
+            "PAUSED",
+            "SUBSCRIBED",
+            "UNKNOWN",
+            "WHITELISTED",
+          ]),
+          nattedIpAddress: string(),
+          vlanName: string(),
+          inBytes: number(),
+          outBytes: number(),
+          allBytes: number(),
+          inPkts: number(),
+          outPkts: number(),
+          allowedSessionTimeSecs: number(),
+          remainingTimeSecs: number(),
+          start: timestamp,
+          serviceType: string(),
+          userMac: string(),
+        })
+      )
+    ),
+    modified: pipe(string(), isoTimestamp()),
+    created: pipe(string(), isoTimestamp()),
+    provider: string(),
+    priority: number(),
+    meta: partial(
+      looseObject({
+        revision: number(),
+        created: timestamp,
+        version: number(),
+        updated: timestamp,
+      })
+    ),
+    $loki: number(),
   })
 );

@@ -3,6 +3,7 @@ import {
   apiVersionSchema,
   deviceInfoSchema,
   flightInformationSchema,
+  internetProvisionSchema,
   manufacturerConfigSchema,
   portalConfigSchema,
   wifiInventorySchema,
@@ -63,5 +64,14 @@ export async function getApiVersion(apiBaseUrl: string | URL) {
   return parse(
     apiVersionSchema,
     await (await fetch(new URL("version.json", apiBaseUrl))).json()
+  );
+}
+
+export async function getInternetProvision(apiBaseUrl: string | URL) {
+  return parse(
+    internetProvisionSchema,
+    await (
+      await fetch(new URL("v2/internet-svc/internet-provision", apiBaseUrl))
+    ).json()
   );
 }
