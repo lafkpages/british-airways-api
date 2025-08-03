@@ -67,11 +67,18 @@ export async function getApiVersion(apiBaseUrl: string | URL) {
   );
 }
 
-export async function getInternetProvision(apiBaseUrl: string | URL) {
+export async function getInternetProvision(
+  apiBaseUrl: string | URL,
+  deviceToken: string
+) {
   return parse(
     internetProvisionSchema,
     await (
-      await fetch(new URL("v2/internet-svc/internet-provision", apiBaseUrl))
+      await fetch(new URL("v2/internet-svc/internet-provision", apiBaseUrl), {
+        headers: {
+          "X-Device-Token": deviceToken,
+        },
+      })
     ).json()
   );
 }
