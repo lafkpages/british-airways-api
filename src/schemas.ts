@@ -243,7 +243,7 @@ export const internetProvisionSchema = partial(
     ),
     wispPackageType: string(),
     isFullFlightPackage: boolean(),
-    allowedSessionTimeSecs: boolean(),
+    allowedSessionTimeSecs: number(),
     sessionInfo: array(
       partial(
         looseObject({
