@@ -1,5 +1,6 @@
 *.har
 /nmap.md
+/test.md
 /re/rawChunks
 /re/src
 
