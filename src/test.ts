@@ -44,11 +44,12 @@ const deviceToken =
   (manufacturerConfig.emulator
     ? await registerDevice(manufacturerConfig.emulator)
     : null
-  )?.deviceToken || "null";
+  )?.deviceToken || null;
 
-const internetProvision = manufacturerConfig.emulator
-  ? await getInternetProvision(manufacturerConfig.emulator, deviceToken)
-  : null;
+const internetProvision =
+  manufacturerConfig.emulator && deviceToken
+    ? await getInternetProvision(manufacturerConfig.emulator, deviceToken)
+    : null;
 console.log("Internet provision:", internetProvision);
 
 const originAirportInformation =
