@@ -12,6 +12,7 @@ import {
   wifiInventorySchema,
 } from "./schemas";
 
+const defaultPortalBaseUrl: string | URL = "https://shop.ba.com";
 const defaultApiBaseUrl: string | URL = "https://api.air.dot-air.com";
 
 export async function isInFlight() {
@@ -29,7 +30,10 @@ export async function getManufacturerConfig() {
     manufacturerConfigSchema,
     await (
       await fetch(
-        `https://shop.ba.com/config/env/manufacturer.json?t=${Date.now()}`
+        new URL(
+          `config/env/manufacturer.json?t=${Date.now()}`,
+          defaultPortalBaseUrl
+        )
       )
     ).json()
   );
@@ -51,7 +55,10 @@ export async function getPortalConfig() {
     portalConfigSchema,
     await (
       await fetch(
-        `https://shop.ba.com/config/env/portal-config.json?t=${Date.now()}`
+        new URL(
+          `config/env/portal-config.json?t=${Date.now()}`,
+          defaultPortalBaseUrl
+        )
       )
     ).json()
   );
