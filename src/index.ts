@@ -18,10 +18,9 @@ const defaultApiBaseUrl: string | URL = "https://api.air.dot-air.com";
 export async function isInFlight() {
   const resp = await fetch(new URL("version.json", defaultApiBaseUrl), {
     redirect: "manual",
-  });
-  return (
-    resp.ok &&
-    !!resp.headers.get("content-type")?.startsWith("application/json")
+  }).catch(() => null);
+  return !!(
+    resp?.ok && resp.headers.get("content-type")?.startsWith("application/json")
   );
 }
 
