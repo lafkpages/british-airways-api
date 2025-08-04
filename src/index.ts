@@ -12,8 +12,10 @@ import {
   wifiInventorySchema,
 } from "./schemas";
 
+const defaultApiBaseUrl: string | URL = "https://api.air.dot-air.com";
+
 export async function isInFlight() {
-  const resp = await fetch("https://api.air.dot-air.com/version.json", {
+  const resp = await fetch(new URL("version.json", defaultApiBaseUrl), {
     redirect: "manual",
   });
   return (
@@ -33,7 +35,7 @@ export async function getManufacturerConfig() {
   );
 }
 
-export async function getFlightInformation(baseUrl: string | URL) {
+export async function getFlightInformation(baseUrl = defaultApiBaseUrl) {
   return parse(
     flightInformationSchema,
     await (
@@ -64,7 +66,7 @@ export async function getDeviceInfo(provisioningServiceBaseUrl: string | URL) {
   );
 }
 
-export async function getWifiInventory(apiBaseUrl: string | URL) {
+export async function getWifiInventory(apiBaseUrl = defaultApiBaseUrl) {
   return parse(
     wifiInventorySchema,
     await (
@@ -73,14 +75,14 @@ export async function getWifiInventory(apiBaseUrl: string | URL) {
   );
 }
 
-export async function getApiVersion(apiBaseUrl: string | URL) {
+export async function getApiVersion(apiBaseUrl = defaultApiBaseUrl) {
   return parse(
     apiVersionSchema,
     await (await fetch(new URL("version.json", apiBaseUrl))).json()
   );
 }
 
-export async function registerDevice(apiBaseUrl: string | URL) {
+export async function registerDevice(apiBaseUrl = defaultApiBaseUrl) {
   return parse(
     registerDeviceSchema,
     await (
@@ -99,7 +101,7 @@ export async function registerDevice(apiBaseUrl: string | URL) {
 }
 
 export async function getInternetProvision(
-  apiBaseUrl: string | URL,
+  apiBaseUrl = defaultApiBaseUrl,
   deviceToken: string
 ) {
   return parse(
@@ -115,7 +117,7 @@ export async function getInternetProvision(
 }
 
 export async function getAirportInformation(
-  apiBaseUrl: string | URL,
+  apiBaseUrl = defaultApiBaseUrl,
   iata: string
 ) {
   return parse(
@@ -132,7 +134,7 @@ export async function getAirportInformation(
 }
 
 export async function getWeather(
-  apiBaseUrl: string | URL,
+  apiBaseUrl = defaultApiBaseUrl,
   languages: string[] = ["en-GB"],
   services: string[] = ["currentconditions", "forecast5days"],
   unit: "Metric" | "Imperial" = "Metric"
