@@ -142,8 +142,8 @@ export async function getAirportInformation(
 
 export async function getWeather(
   apiBaseUrl = defaultApiBaseUrl,
-  languages: string[] = ["en-GB"],
-  services: string[] = ["currentconditions", "forecast5days"],
+  languages = ["en-GB"],
+  services = ["currentconditions", "forecast5days"],
   unit: "Metric" | "Imperial" = "Metric"
 ) {
   return parse(
